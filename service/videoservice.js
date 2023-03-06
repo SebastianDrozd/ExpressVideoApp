@@ -1,10 +1,22 @@
-const { getAllVideos } = require("../repos/videorepo")
+const { getAllVideos, getVideoById } = require("../repos/videorepo")
 const uuid = require('uuid')
 const getVideos = () => {
     return new Promise((resolve,reject) => {
         getAllVideos()
         .then((videos) => {
             resolve(videos)
+        })
+        .catch(err => {
+            reject(err)
+        })
+    })
+}
+
+const getVideo = (id) => {
+    return new Promise((resolve,reject) => {
+        getVideoById(id)
+        .then((video) => {
+            resolve(video)
         })
         .catch(err => {
             reject(err)
@@ -20,4 +32,4 @@ const createVideo = (video) => {
     }
 }
 
-module.exports = {getVideos}
+module.exports = {getVideos,getVideo}

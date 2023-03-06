@@ -11,7 +11,13 @@ const getAllVideos = () => {
                
             }
             else{
-                connection.query('SELECT * FROM videos',(error,result) => {
+                const sql = `SELECT videos.id, videos.title, videos.description, videos.year, videos.length, GROUP_CONCAT(categories.name SEPARATOR ', ') AS category_names 
+                FROM videos 
+                INNER JOIN videocategories ON videos.id = videocategories.videoid 
+                INNER JOIN categories ON videocategories.categoryid = categories.id 
+                GROUP BY videos.id`
+                
+                connection.query(sql,(error,result) => {
                     connection.release();
                     if(error) reject(new DatabaseError())
                     resolve(result)
@@ -29,7 +35,13 @@ const getVideoById = (id) => {
                 reject(new ConnectionError())
             }
             else{
-                connection.query('SELECT * FROM videos WHERE id = ?',id,(error,result) => {
+                const sql = `SELECT videos.id, videos.title, videos.description, videos.year, videos.length, GROUP_CONCAT(categories.name SEPARATOR ', ') AS category_names 
+                FROM videos 
+                INNER JOIN videocategories ON videos.id = videocategories.videoid 
+                INNER JOIN categories ON videocategories.categoryid = categories.id 
+                where videos.id = "${id}"
+                GROUP BY videos.id`
+                connection.query(sql,(error,result) => {
                     connection.release();
                     if(error) reject(new DatabaseError())
                     resolve(result)
@@ -39,6 +51,18 @@ const getVideoById = (id) => {
     })
 }
 
+const getVideoCategories = (id) => {
+    return new Promise((resolve,reject) => {
+        pool.getConnection((err,connection) => {
+            if(err){
+                reject(new ConnectionError())
+            }
+            else{
+                const sql = ``
+            }
+        })
+    })
+}
 const createVideo = (video) => {
     return new Promise((resolve,reject) => {
         pool.getConnection((err,connection) => {
@@ -55,4 +79,4 @@ const createVideo = (video) => {
         })
     })
 }
-module.exports = {getAllVideos}
+module.exports = {getAllVideos,getVideoById}

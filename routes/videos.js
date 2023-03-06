@@ -1,17 +1,27 @@
-const { getVideos } = require('../service/videoservice');
+const { getVideos, getVideo } = require('../service/videoservice');
 
 const router = require('express').Router();
 
 // Get all videos
-
 router.get('/',(req,res) => {
-   getVideos()    
+   getVideos()   
    .then((videos) => {
         res.send(videos)
    })
    .catch(err => { 
     res.status(err.statusCode).send(err)
    })
+})
+//get video by id
+router.get('/:id',(req,res) => {
+    let id = req.params.id;
+    getVideo(id)
+    .then((video) => {
+        res.send(video)
+    })
+    .catch(err => { 
+        res.status(err.statusCode).send(err)
+    })
 })
 
 router.post('/',(req,res) => {
